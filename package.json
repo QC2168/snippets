@@ -1,0 +1,13 @@
+{
+  "name": "snippets",
+  "version": "1.0.0",
+  "private": true,
+  "description": "some snippets",
+  "main": "index.js",
+  "author": "QC2168",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^18.11.9",
+    "vue": "^3.2.45"
+  }
+}
