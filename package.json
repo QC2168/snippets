@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^18.11.9",
+    "@wangeditor/editor": "^5.1.23",
     "vue": "^3.2.45"
   }
 }
