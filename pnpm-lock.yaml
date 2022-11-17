@@ -1,14 +1,20 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@better-scroll/core': ^2.5.0
+  '@types/better-scroll': ^1.12.4
   '@types/node': ^18.11.9
   '@wangeditor/editor': ^5.1.23
   vue: ^3.2.45
 
 dependencies:
+  '@better-scroll/core': 2.5.0
   '@types/node': 18.11.9
   '@wangeditor/editor': 5.1.23
   vue: 3.2.45
+
+devDependencies:
+  '@types/better-scroll': 1.12.4
 
 packages:
 
@@ -46,9 +52,23 @@ packages:
       to-fast-properties: 2.0.0
     dev: false
 
+  /@better-scroll/core/2.5.0:
+    resolution: {integrity: sha512-+3aKf8T3kUl4Gj1M7NKV3fNFhsrBpTWwHoDClkXVmQ8S3TxMMHf6Kyw6l1zKsg4r+9ukW5lDDkyif7/gY76qXQ==}
+    dependencies:
+      '@better-scroll/shared-utils': 2.5.0
+    dev: false
+
+  /@better-scroll/shared-utils/2.5.0:
+    resolution: {integrity: sha512-5bfR/cwzIFtgWAU5E0CPKcOUvyd7KcgDZyAbOJQT6qqJeUBmTpG4Z8R7qO8uvqdZ0yIXxRPOu4te2Qt6ihGhkQ==}
+    dev: false
+
   /@transloadit/prettier-bytes/0.0.7:
     resolution: {integrity: sha512-VeJbUb0wEKbcwaSlj5n+LscBl9IPgLPkHVGBkh00cztv6X4L/TJXK58LzFuBKX7/GAfiGhIwH67YTLTlzvIzBA==}
     dev: false
+
+  /@types/better-scroll/1.12.4:
+    resolution: {integrity: sha512-mSp1CULFPnfotPUuJC9RXG6PaVhqJt0bMbo9wXyUypteSM6o0O9pHZCqY4HQX2KqUXqwtxIvUja1q+rWf3CR7g==}
+    dev: true
 
   /@types/event-emitter/0.3.3:
     resolution: {integrity: sha512-UfnOK1pIxO7P+EgPRZXD9jMpimd8QEFcEZ5R67R1UhGbv4zghU5+NE7U8M8G9H5Jc8FI51rqDWQs6FtUfq2e/Q==}

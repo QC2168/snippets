@@ -7,8 +7,12 @@
   "author": "QC2168",
   "license": "MIT",
   "dependencies": {
+    "@better-scroll/core": "^2.5.0",
     "@types/node": "^18.11.9",
     "@wangeditor/editor": "^5.1.23",
     "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@types/better-scroll": "^1.12.4"
   }
 }
