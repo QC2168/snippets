@@ -15,12 +15,11 @@ import {
 } from '@wangeditor/editor';
 import '@wangeditor/editor/dist/css/style.css';
 import { toolbarKeys } from './toolbar';
-import { DOMElement } from '@wangeditor/editor/dist/editor/src/utils/dom';
 import { onMounted, ref } from 'vue';
 
-const editorToolbar = ref<string | DOMElement>('');
+const editorToolbar = ref<string | Element>('');
 const editor = ref<IDomEditor>();
-const editorContent = ref<string | DOMElement>('');
+const editorContent = ref<string | Element>('');
 
 interface PropsType {
   id: string;
