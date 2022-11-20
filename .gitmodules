@@ -4,3 +4,6 @@
 [submodule "useCharts"]
 	path = useCharts
 	url = https://github.com/QC2168/useCharts
+[submodule "useDialog"]
+	path = useDialog
+	url = https://github.com/QC2168/useDialog
