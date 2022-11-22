@@ -15,7 +15,7 @@ import {
 } from '@wangeditor/editor';
 import '@wangeditor/editor/dist/css/style.css';
 import { toolbarKeys } from './toolbar';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const editorToolbar = ref<string | Element>('');
 const editor = ref<IDomEditor>();
@@ -83,6 +83,16 @@ const init = () => {
     config: toolbarConfig()
   });
 };
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (value === '' || (value === undefined && editor.value)) {
+      editor.value!.clear();
+    }
+  }
+);
+
 // 页面加载时
 onMounted(() => {
   init();
