@@ -1,14 +1,24 @@
-import { Ref } from 'vue';
-import showMessage from '/@/utils/message';
+import { onMounted, ref, Ref, watch } from "vue";
+import { errorMessage } from "../message";
+import { OptionsType } from "./types";
 const DEFAULT_MESSAGE = {
-  GET_DATA_IF_FAILED: '获取列表数据失败',
-  GET_DATA_IF_SUCCEED: '获取列表数据成功',
-  EXPORT_DATA_IF_FAILED: '导出数据失败'
+  GET_DATA_IF_FAILED: "获取列表数据失败",
+  GET_DATA_IF_SUCCEED: "获取列表数据成功",
+  EXPORT_DATA_IF_FAILED: "导出数据失败",
 };
-export default function useList<ItemType extends Object, FilterOption extends Object>(
+
+const DEFAULT_OPTIONS: OptionsType = {
+  message: DEFAULT_MESSAGE,
+};
+
+export default function useList<
+  ItemType extends Object,
+  FilterOption extends Object
+>(
   listRequest: Function,
   filterOption: Ref<Object>,
-  exportRequest?: Function
+  exportRequest?: Function,
+  options = DEFAULT_OPTIONS
 ) {
   // 加载态
   const loading = ref(false);
@@ -42,35 +52,42 @@ export default function useList<ItemType extends Object, FilterOption extends Ob
     try {
       const {
         data,
-        meta: { total: count }
+        meta: { total: count },
       } = await listRequest(pageSize.value, page, filterOption.value);
       list.value = data;
       total.value = count;
+      options?.requestSuccess?.();
     } catch (error) {
-      showMessage(DEFAULT_MESSAGE.GET_DATA_IF_FAILED, 'error');
+      options?.requestError?.();
+      errorMessage(options.message.GET_DATA_IF_FAILED, "error");
     } finally {
       loading.value = false;
     }
   };
+
   const exportFile = async () => {
-    if (!exportRequest) {
-      throw new Error('当前没有提供exportRequest函数');
+    if (!exportRequest && typeof exportRequest !== "function") {
+      throw new Error("当前没有提供exportRequest函数");
     }
     try {
       const {
-        data: { link }
+        data: { link },
       } = await exportRequest(filterOption.value);
       window.open(link);
     } catch (error) {
-      showMessage(DEFAULT_MESSAGE.EXPORT_DATA_IF_FAILED, 'error');
+      errorMessage(options.message.EXPORT_DATA_IF_FAILED, "error");
     }
   };
+
+
   watch([curPage, pageSize], () => {
     loadData(curPage.value);
   });
+
   onMounted(() => {
     loadData(curPage.value);
   });
+
   return {
     loading,
     curPage,
@@ -82,6 +99,6 @@ export default function useList<ItemType extends Object, FilterOption extends Ob
     filter,
     pageSize,
     exportFile,
-    loadData
+    loadData,
   };
 }
