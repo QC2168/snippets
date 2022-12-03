@@ -1,9 +1,8 @@
 import { onMounted, ref, Ref, watch } from "vue";
 import { errorMessage } from "../message";
-import { OptionsType } from "./types";
-const DEFAULT_MESSAGE = {
+import { MessageType, OptionsType } from "./types";
+const DEFAULT_MESSAGE: MessageType = {
   GET_DATA_IF_FAILED: "获取列表数据失败",
-  GET_DATA_IF_SUCCEED: "获取列表数据成功",
   EXPORT_DATA_IF_FAILED: "导出数据失败",
 };
 
@@ -15,9 +14,9 @@ export default function useList<
   ItemType extends Object,
   FilterOption extends Object
 >(
-  listRequest: Function,
+  listRequestFn: Function,
   filterOption: Ref<Object>,
-  exportRequest?: Function,
+  exportRequestFn?: Function,
   options = DEFAULT_OPTIONS
 ) {
   // 加载态
@@ -43,6 +42,7 @@ export default function useList<
     });
     loadData();
   };
+
   const filter = () => {
     loadData();
   };
@@ -53,33 +53,35 @@ export default function useList<
       const {
         data,
         meta: { total: count },
-      } = await listRequest(pageSize.value, page, filterOption.value);
+      } = await listRequestFn(pageSize.value, page, filterOption.value);
       list.value = data;
       total.value = count;
       options?.requestSuccess?.();
     } catch (error) {
+      options?.message?.GET_DATA_IF_FAILED && errorMessage(options.message.GET_DATA_IF_FAILED, "error");
       options?.requestError?.();
-      errorMessage(options.message.GET_DATA_IF_FAILED, "error");
     } finally {
       loading.value = false;
     }
   };
 
   const exportFile = async () => {
-    if (!exportRequest && typeof exportRequest !== "function") {
+    if (!exportRequestFn && typeof exportRequestFn !== "function") {
       throw new Error("当前没有提供exportRequest函数");
     }
     try {
       const {
         data: { link },
-      } = await exportRequest(filterOption.value);
+      } = await exportRequestFn(filterOption.value);
       window.open(link);
+      options?.exportSuccess?.();
     } catch (error) {
-      errorMessage(options.message.EXPORT_DATA_IF_FAILED, "error");
+      options?.message?.EXPORT_DATA_IF_FAILED && errorMessage(options.message.EXPORT_DATA_IF_FAILED, "error");
+      options?.exportError?.();
     }
   };
 
-
+  // 监听分页数据改变
   watch([curPage, pageSize], () => {
     loadData(curPage.value);
   });
