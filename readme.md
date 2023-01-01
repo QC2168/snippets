@@ -14,12 +14,12 @@
 
 | 仓库目录          | 目录内容说明                                       |
 |---------------|----------------------------------------------|
-| axios-bz      | 基于axios+typescript二次封装的库，可直接在项目中使用           |
+| [axios-bz](https://github.com/QC2168/axios-bz)  | 基于axios+typescript二次封装的库，可直接在项目中使用           |
 | betterScroll  | 在betterScroll库的基础上搭配Vue封装的滚动组件               |
 | CSS/scrollbar | 美化项目中的滚动条，我的博客中的滚动条是使用了这里面的样式                |
 | message       | 基于element-plus组件库二次封装消息提示组件 (也有ant-design的~) |
-| useCharts     | 基于echarts二次封装的hooks，使用起来更加简单高效               |
-| useDialog     | 基于element-plus二次封装的hooks，使用起来更加简单高效          |
+| [useCharts](https://github.com/QC2168/useCharts) | 基于echarts二次封装的hooks，使用起来更加简单高效               |
+| [useDialog](https://github.com/QC2168/useDialog) | 基于element-plus二次封装的hooks，使用起来更加简单高效          |
 | useList       | 基于Vue封装的快速渲染出列表数据hooks                       |
 | usePassTime   | 计算当前和过去某个时间的差值                               |
 | useSendCode   | 基于Vue CompositionApi封装的发送二维码hooks            |
