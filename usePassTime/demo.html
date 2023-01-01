@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p id="visited">现在距离过去已经秒了</p>
+<p id="start">现在距离2023年1月1日0：00已经过去</p>
+</body>
+<script>
+    // 计算当前时间与过去某个时间的差值
+    function usePassTime(sourceTime) {
+        const currentTime = Date.now();
+        const time = currentTime - sourceTime;
+        const day = Math.floor(time / (1000 * 60 * 60 * 24));
+        const hour = Math.floor(time / (1000 * 60 * 60));
+        const min = Math.floor(time / (1000 * 60));
+        const second = Math.floor(time / 1000);
+        const month = Math.floor(day / 30);
+        const year = Math.floor(month / 12);
+        if (year) return year + "年前"
+        if (month) return month + "个月前"
+        if (day) return day + "天前"
+        if (hour) return hour + "小时前"
+        if (min) return min + "分钟前"
+        if (second) return second + "秒前"
+        else return '刚刚'
+    }
+    const enterTime=new Date()
+    const visitedDom=document.getElementById('visited')
+    const startDom=document.getElementById('start')
+    visitedDom.innerHTML=`<p id="visited">现在距离访问该页面过去已经过去${usePassTime(enterTime)}了</p>`
+    startDom.innerHTML=`<p id="start">现在距离2023年1月1日0:00 已经过去${usePassTime(1672502400000)}了</p>`
+    setInterval(()=>{
+        visitedDom.innerHTML=`<p id="visited">现在距离访问该页面过去已经过去${usePassTime(enterTime)}了</p>`
+    },1000)
+</script>
+</html>
