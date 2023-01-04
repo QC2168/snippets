@@ -1,5 +1,5 @@
 import { onMounted, ref, Ref, watch } from "vue";
-import { errorMessage } from "../message";
+import {errorMessage} from "../message";
 import { MessageType, OptionsType } from "./types";
 const DEFAULT_MESSAGE: MessageType = {
   GET_DATA_IF_FAILED: "获取列表数据失败",
@@ -17,8 +17,10 @@ export default function useList<
   listRequestFn: Function,
   filterOption: Ref<Object>,
   exportRequestFn?: Function,
-  options = DEFAULT_OPTIONS
+  options:OptionsType=DEFAULT_OPTIONS
 ) {
+  const {immediate=true,preRequest,message=DEFAULT_MESSAGE}=options;
+  const {GET_DATA_IF_FAILED,EXPORT_DATA_IF_FAILED}=message
   // 加载态
   const loading = ref(false);
   // 当前页
@@ -50,6 +52,7 @@ export default function useList<
   const loadData = async (page = curPage.value) => {
     loading.value = true;
     try {
+      preRequest?.()
       const {
         data,
         meta: { total: count },
@@ -58,7 +61,7 @@ export default function useList<
       total.value = count;
       options?.requestSuccess?.();
     } catch (error) {
-      options?.message?.GET_DATA_IF_FAILED && errorMessage(options.message.GET_DATA_IF_FAILED, "error");
+      GET_DATA_IF_FAILED && errorMessage(GET_DATA_IF_FAILED, "error");
       options?.requestError?.();
     } finally {
       loading.value = false;
@@ -76,7 +79,7 @@ export default function useList<
       window.open(link);
       options?.exportSuccess?.();
     } catch (error) {
-      options?.message?.EXPORT_DATA_IF_FAILED && errorMessage(options.message.EXPORT_DATA_IF_FAILED, "error");
+      EXPORT_DATA_IF_FAILED && errorMessage(EXPORT_DATA_IF_FAILED, "error");
       options?.exportError?.();
     }
   };
@@ -87,7 +90,9 @@ export default function useList<
   });
 
   onMounted(() => {
-    loadData(curPage.value);
+     if(immediate){
+         loadData(curPage.value);
+     }
   });
 
   return {

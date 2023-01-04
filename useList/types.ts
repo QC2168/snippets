@@ -10,4 +10,6 @@ export interface OptionsType {
   exportError?: () => void;
   exportSuccess?: () => void;
   message: MessageType;
+  preRequest?:Function;
+  immediate?:boolean;
 }
