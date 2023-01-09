@@ -6,6 +6,7 @@ specifiers:
   '@types/node': ^18.11.9
   '@wangeditor/editor': ^5.1.23
   element-plus: ^2.2.23
+  sortablejs: ^1.15.0
   vue: ^3.2.45
 
 dependencies:
@@ -13,6 +14,7 @@ dependencies:
   '@types/node': 18.11.9
   '@wangeditor/editor': 5.1.23
   element-plus: 2.2.23_vue@3.2.45
+  sortablejs: 1.15.0
   vue: 3.2.45
 
 devDependencies:
@@ -707,6 +709,10 @@ packages:
   /snabbdom/3.5.1:
     resolution: {integrity: sha512-wHMNIOjkm/YNE5EM3RCbr/+DVgPg6AqQAX1eOxO46zYNvCXjKP5Y865tqQj3EXnaMBjkxmQA5jFuDpDK/dbfiA==}
     engines: {node: '>=8.3.0'}
+    dev: false
+
+  /sortablejs/1.15.0:
+    resolution: {integrity: sha512-bv9qgVMjUMf89wAvM6AxVvS/4MX3sPeN0+agqShejLU5z5GX4C75ow1O2e5k4L6XItUyAK3gH6AxSbXrOM5e8w==}
     dev: false
 
   /source-map-js/1.0.2:

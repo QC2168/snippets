@@ -11,6 +11,7 @@
     "@types/node": "^18.11.9",
     "@wangeditor/editor": "^5.1.23",
     "element-plus": "^2.2.23",
+    "sortablejs": "^1.15.0",
     "vue": "^3.2.45"
   },
   "devDependencies": {
