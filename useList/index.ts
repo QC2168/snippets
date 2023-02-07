@@ -1,6 +1,7 @@
 import { onMounted, ref, Ref, watch } from "vue";
-import {errorMessage} from "../message";
+import { errorMessage } from "../message";
 import { MessageType, OptionsType } from "./types";
+
 const DEFAULT_MESSAGE: MessageType = {
   GET_DATA_IF_FAILED: "获取列表数据失败",
   EXPORT_DATA_IF_FAILED: "导出数据失败",
@@ -10,17 +11,18 @@ const DEFAULT_OPTIONS: OptionsType = {
   message: DEFAULT_MESSAGE,
 };
 
-export default function useList<
-  ItemType extends Object,
-  FilterOption extends Object
->(
-  listRequestFn: Function,
-  filterOption: Ref<Object>,
-  exportRequestFn?: Function,
-  options:OptionsType=DEFAULT_OPTIONS
+export default function useList(
+  listRequestFn: (...args: any) => any,
+  options: OptionsType = DEFAULT_OPTIONS
 ) {
-  const {immediate=true,preRequest,message=DEFAULT_MESSAGE}=options;
-  const {GET_DATA_IF_FAILED,EXPORT_DATA_IF_FAILED}=message
+  const {
+    immediate = true,
+    preRequest,
+    message = DEFAULT_MESSAGE,
+    filterOption = ref(),
+    exportRequestFn = undefined,
+  } = options;
+  const { GET_DATA_IF_FAILED, EXPORT_DATA_IF_FAILED } = message;
   // 加载态
   const loading = ref(false);
   // 当前页
@@ -30,7 +32,7 @@ export default function useList<
   // 分页大小
   const pageSize = ref(10);
   // 数据
-  const list = ref<ItemType[]>([]);
+  const list = ref<ReturnType<typeof listRequestFn>["data"]>([]);
   // 过滤数据
   const reload = () => {
     loadData();
@@ -38,7 +40,6 @@ export default function useList<
   const reset = () => {
     if (!filterOption.value) return;
     const keys = Reflect.ownKeys(filterOption.value);
-    filterOption.value = {} as FilterOption;
     keys.forEach((key) => {
       Reflect.set(filterOption.value!, key, undefined);
     });
@@ -52,7 +53,7 @@ export default function useList<
   const loadData = async (page = curPage.value) => {
     loading.value = true;
     try {
-      preRequest?.()
+      preRequest?.();
       const {
         data,
         meta: { total: count },
@@ -61,7 +62,7 @@ export default function useList<
       total.value = count;
       options?.requestSuccess?.();
     } catch (error) {
-      GET_DATA_IF_FAILED && errorMessage(GET_DATA_IF_FAILED, "error");
+      GET_DATA_IF_FAILED && errorMessage(GET_DATA_IF_FAILED);
       options?.requestError?.();
     } finally {
       loading.value = false;
@@ -79,7 +80,7 @@ export default function useList<
       window.open(link);
       options?.exportSuccess?.();
     } catch (error) {
-      EXPORT_DATA_IF_FAILED && errorMessage(EXPORT_DATA_IF_FAILED, "error");
+      EXPORT_DATA_IF_FAILED && errorMessage(EXPORT_DATA_IF_FAILED);
       options?.exportError?.();
     }
   };
@@ -90,9 +91,9 @@ export default function useList<
   });
 
   onMounted(() => {
-     if(immediate){
-         loadData(curPage.value);
-     }
+    if (immediate) {
+      loadData(curPage.value);
+    }
   });
 
   return {
