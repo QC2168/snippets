@@ -6,6 +6,10 @@
   "main": "index.js",
   "author": "QC2168",
   "license": "MIT",
+  "scripts": {
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
   "dependencies": {
     "@better-scroll/core": "^2.5.0",
     "@element-plus/icons-vue": "^2.0.10",
@@ -13,7 +17,9 @@
     "@wangeditor/editor": "^5.1.23",
     "axios": "^1.2.6",
     "element-plus": "^2.2.23",
+    "lodash-es": "^4.17.21",
     "sortablejs": "^1.15.0",
+    "vitest": "^0.28.4",
     "vue": "^3.2.45"
   },
   "devDependencies": {
