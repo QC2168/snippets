@@ -7,13 +7,9 @@ const DEFAULT_MESSAGE: MessageType = {
   EXPORT_DATA_IF_FAILED: "导出数据失败",
 };
 
-const DEFAULT_OPTIONS: OptionsType = {
-  message: DEFAULT_MESSAGE,
-};
-
 export default function useList(
   listRequestFn: (...args: any) => any,
-  options: OptionsType = DEFAULT_OPTIONS
+  options: OptionsType = {}
 ) {
   const {
     immediate = true,

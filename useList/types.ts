@@ -14,7 +14,7 @@ export interface OptionsType<T = any> {
   filterOption?: Ref<T>;
   transformFn?: (...args) => any;
   exportRequestFn?: Function;
-  message: MessageType;
+  message?: MessageType;
   preRequest?: Function;
   immediate?: boolean;
 }
