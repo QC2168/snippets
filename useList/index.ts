@@ -1,13 +1,6 @@
 import { onMounted, ref, Ref, watch } from "vue";
 import { errorMessage } from "../message";
-import { MessageType, OptionsType } from "./types";
-
-// Api接口类型
-export interface ResponseDataType<T = any> {
-  data: T;
-  meta: { total: number }
-}
-
+import { MessageType, OptionsType, ResponseDataType } from "./types";
 
 const DEFAULT_MESSAGE: MessageType = {
   GET_DATA_IF_FAILED: "获取列表数据失败",
