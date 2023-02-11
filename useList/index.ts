@@ -2,13 +2,20 @@ import { onMounted, ref, Ref, watch } from "vue";
 import { errorMessage } from "../message";
 import { MessageType, OptionsType } from "./types";
 
+// Api接口类型
+export interface ResponseDataType<T = any> {
+  data: T;
+  meta: { total: number }
+}
+
+
 const DEFAULT_MESSAGE: MessageType = {
   GET_DATA_IF_FAILED: "获取列表数据失败",
   EXPORT_DATA_IF_FAILED: "导出数据失败",
 };
 
-export default function useList(
-  listRequestFn: (...args: any) => any,
+export default function useList<T extends (...args:any)=>Promise<ResponseDataType<any>>>(
+  listRequestFn: T,
   options: OptionsType = {}
 ) {
   const {
@@ -28,7 +35,7 @@ export default function useList(
   // 分页大小
   const pageSize = ref(10);
   // 数据
-  const list = ref<ReturnType<typeof listRequestFn>["data"]>([]);
+  const list = ref<Awaited<ReturnType<typeof listRequestFn>>['data']>([]);
   // 过滤数据
   const reload = () => {
     loadData();
