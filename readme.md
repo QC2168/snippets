@@ -26,6 +26,7 @@
 | wangeditor    | 基于wangeditor富文本编辑器封装的Vue组件                   |
 | inputNumberRange    | 基于ElementUI+vue封装的范围输入组件                   |
 | uploadImage    | 基于ElementUI+vue封装的图片上传组件                   |
+| dynamicTags    | 基于ElementUI+vue封装的动态编辑标签组件                   |
 
 ---
 
