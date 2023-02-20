@@ -1,4 +1,4 @@
-import { onMounted, ref, Ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { errorMessage } from "../message";
 import { MessageType, OptionsType, ResponseDataType } from "./types";
 
@@ -7,10 +7,9 @@ const DEFAULT_MESSAGE: MessageType = {
   EXPORT_DATA_IF_FAILED: "导出数据失败",
 };
 
-export default function useList<T extends (...args:any)=>Promise<ResponseDataType<any>>>(
-  listRequestFn: T,
-  options: OptionsType = {}
-) {
+export default function useList<
+  T extends (...args: any) => Promise<ResponseDataType<any>>
+>(listRequestFn: T, options: OptionsType = {}) {
   const {
     immediate = true,
     preRequest,
@@ -28,11 +27,7 @@ export default function useList<T extends (...args:any)=>Promise<ResponseDataTyp
   // 分页大小
   const pageSize = ref(10);
   // 数据
-  const list = ref<Awaited<ReturnType<typeof listRequestFn>>['data']>([]);
-  // 过滤数据
-  const reload = () => {
-    loadData();
-  };
+  const list = ref<Awaited<ReturnType<typeof listRequestFn>>["data"]>([]);
   const reset = () => {
     if (!filterOption.value) return;
     const keys = Reflect.ownKeys(filterOption.value);
@@ -42,21 +37,21 @@ export default function useList<T extends (...args:any)=>Promise<ResponseDataTyp
     loadData();
   };
 
-  const filter = () => {
-    loadData();
-  };
-
-  const loadData = async (page = curPage.value) => {
+  const loadData = async (page = curPage.value, size = pageSize.value) => {
     loading.value = true;
     try {
       preRequest?.();
       const {
         data,
         meta: { total: count },
-      } = await listRequestFn(pageSize.value, page, filterOption.value);
+      } = await listRequestFn(size, page, filterOption.value);
       list.value = data;
       total.value = count;
       options?.requestSuccess?.();
+      return {
+        list: data,
+        total: count,
+      };
     } catch (error) {
       GET_DATA_IF_FAILED && errorMessage(GET_DATA_IF_FAILED);
       options?.requestError?.();
@@ -98,9 +93,7 @@ export default function useList<T extends (...args:any)=>Promise<ResponseDataTyp
     total,
     list,
     filterOption,
-    reload,
     reset,
-    filter,
     pageSize,
     exportFile,
     loadData,
