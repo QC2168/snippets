@@ -2,11 +2,11 @@ import { Ref } from "vue";
 // Api接口类型
 export interface ResponseDataType<T = any> {
   data: T;
-  meta: { total: number }
+  meta: { total: number };
 }
 
-export interface ExportLinkType{
-  link: string
+export interface ExportLinkType {
+  link: string;
 }
 
 export interface MessageType {
@@ -15,14 +15,19 @@ export interface MessageType {
   EXPORT_DATA_IF_FAILED?: string;
   EXPORT_DATA_IF_SUCCEED?: string;
 }
+
+export interface ListReturn<T = any> {
+  data: T[];
+  total: number;
+}
 export interface OptionsType<T = any> {
   requestError?: () => void;
   requestSuccess?: () => void;
   exportError?: () => void;
   exportSuccess?: () => void;
   filterOption?: Ref<T>;
-  transformFn?: (...args) => any;
-  exportRequestFn?: (...args:any)=>Promise<ResponseDataType<ExportLinkType>>;
+  transformFn?: (...args) => ListReturn;
+  exportRequestFn?: (...args: any) => Promise<ResponseDataType<ExportLinkType>>;
   message?: MessageType;
   preRequest?: Function;
   immediate?: boolean;

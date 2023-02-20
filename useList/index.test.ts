@@ -21,20 +21,33 @@ describe("useList", () => {
       },
     });
     await loadData();
-    expect(filterOption.value).toEqual({name:'foo'});
+    expect(filterOption.value).toEqual({ name: "foo" });
   });
 
   test("should have filterOption value of empty", async () => {
     const filterOption = ref({
-        name:'foo',
-        mobile:'186xxxxxxxx',
-        id:'1',
+      name: "foo",
+      mobile: "186xxxxxxxx",
+      id: "1",
     });
-    const { loadData,reset } = useList(requestFn, {
-      filterOption
+    const { loadData, reset } = useList(requestFn, {
+      filterOption,
     });
     await loadData();
-    reset()
+    reset();
     expect(filterOption.value).toEqual({});
+  });
+
+  test("should have list value of empty array and total of 0", async () => {
+    const { list, total } = useList(requestFn, {
+      transformFn() {
+        return {
+          data: [],
+          total: 0,
+        };
+      },
+    });
+    expect(list.value).toEqual([]);
+    expect(total.value).toEqual(0);
   });
 });

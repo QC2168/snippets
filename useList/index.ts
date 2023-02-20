@@ -16,6 +16,7 @@ export default function useList<
     message = DEFAULT_MESSAGE,
     filterOption = ref(),
     exportRequestFn = undefined,
+    transformFn = undefined,
   } = options;
   const { GET_DATA_IF_FAILED, EXPORT_DATA_IF_FAILED } = message;
   // 加载态
@@ -37,29 +38,35 @@ export default function useList<
     loadData();
   };
 
-  const loadData = async (page = curPage.value, size = pageSize.value) => {
-    loading.value = true;
-    try {
-      preRequest?.();
-      const {
-        data,
-        meta: { total: count },
-      } = await listRequestFn(size, page, filterOption.value);
-      list.value = data;
-      total.value = count;
-      options?.requestSuccess?.();
-      return {
-        list: data,
-        total: count,
-      };
-    } catch (error) {
-      GET_DATA_IF_FAILED && errorMessage(GET_DATA_IF_FAILED);
-      options?.requestError?.();
-    } finally {
-      loading.value = false;
-    }
+  const loadData = (page = curPage.value, size = pageSize.value) => {
+    return new Promise(async (resolve, reject) => {
+      loading.value = true;
+      try {
+        preRequest?.();
+        const result = await listRequestFn(size, page, filterOption.value);
+        const transformResult = transformFn ? transformFn(result) : result;
+        let data = transformResult.data;
+        let count =
+          "meta" in transformResult
+            ? transformResult.meta.total
+            : "total" in transformResult
+            ? transformResult.total
+            : 0;
+        list.value = data;
+        total.value = count;
+        options?.requestSuccess?.();
+        resolve({
+          list: data,
+          total: count,
+        });
+      } catch (error) {
+        GET_DATA_IF_FAILED && errorMessage(GET_DATA_IF_FAILED);
+        options?.requestError?.();
+      } finally {
+        loading.value = false;
+      }
+    });
   };
-
   const exportFile = async () => {
     if (!exportRequestFn && typeof exportRequestFn !== "function") {
       throw new Error("当前没有提供exportRequest函数");
