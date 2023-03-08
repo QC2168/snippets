@@ -1,4 +1,4 @@
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, unref, watch } from "vue";
 import { errorMessage } from "../message";
 import { MessageType, OptionsType, ResponseDataType } from "./types";
 
@@ -39,6 +39,10 @@ export default function useList<
   };
 
   const loadData = (page = curPage.value, size = pageSize.value) => {
+    // 兼容page可能是event
+		if (typeof page === 'object') {
+			page = unref(curPage);
+		}
     return new Promise(async (resolve, reject) => {
       loading.value = true;
       try {
