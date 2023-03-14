@@ -27,6 +27,7 @@
 | inputNumberRange    | 基于ElementUI+vue封装的范围输入组件                   |
 | uploadImage    | 基于ElementUI+vue封装的图片上传组件                   |
 | dynamicTags    | 基于ElementUI+vue封装的动态编辑标签组件                   |
+| utils/genRules    | 快速生成默认验证规则（async-validator & ElementUI）                   |
 
 ---
 

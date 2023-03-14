@@ -15,6 +15,7 @@
     "@element-plus/icons-vue": "^2.0.10",
     "@types/node": "^18.11.9",
     "@wangeditor/editor": "^5.1.23",
+    "async-validator": "^4.2.5",
     "axios": "^1.2.6",
     "element-plus": "^2.2.23",
     "lodash-es": "^4.17.21",
