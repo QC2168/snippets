@@ -31,13 +31,19 @@
   </el-button>
 </template>
 <script setup lang="ts">
-import useDynamicTags from "./useDynamicTags";
 
-function requestTag() {
-  return new Promise((resolve) => {
-    resolve(["tag1", "tag2"]);
-  });
-}
+import useDynamicTags from "./useDynamicTags";
+import { watch } from "vue";
+
+const props=defineProps<{
+  submitFn?:any,
+  requestTag?:any,
+  modelValue: string[];
+}>()
+
+const emit = defineEmits<{
+		(e: 'update:modelValue', tags: string[]): void;
+}>();
 
 const {
   tags,
@@ -48,7 +54,19 @@ const {
   handleInputSelect,
   handleInputConfirm,
   handleAddTags,
-} = useDynamicTags(requestTag);
+} = useDynamicTags({
+  submitFn:props.submitFn,
+  requestFn:props.requestTag
+});
+
+watch(tags, (val: string[]) => {
+	emit('update:modelValue', val);
+});
+
+watch(()=>props.modelValue, (val: string[]) => {
+  if(!val)return
+	tags.value = val;
+});
 
 </script>
 <style lang="less" scoped></style>

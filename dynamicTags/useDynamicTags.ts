@@ -1,11 +1,27 @@
 import { CascaderOption } from "element-plus";
-import { ref, nextTick } from "vue";
+import { ref, nextTick, unref } from "vue";
 import { warningMessage, errorMessage } from "../message";
 import { pullAt } from "lodash-es";
 
-export default function useDynamicTags(requestFn: any) {
+export interface OptionsType {
+	requestFn?: (name:string)=>any;
+	submitFn?: (tags:string[])=>any;
+}
+
+export default function useDynamicTags(opt: OptionsType) {
+  const { requestFn, submitFn } = opt;
+  // 提交标签
+  const submitTags=()=>{
+		if (typeof submitFn === 'function') {
+			try {
+				submitFn(unref(tags));
+			} catch (error) {
+				console.error('执行submitFn出错');
+			}
+		}
+	}
   // 当前标签
-  const tags = ref<string[]>();
+  const tags = ref<string[]>([]);
   // 是否显示输入框
   const inputTagVisible = ref(false);
   // 输入框元素
@@ -18,6 +34,7 @@ export default function useDynamicTags(requestFn: any) {
     if (!tags.value) return;
     let idx = tags.value.findIndex((i) => item === i);
     pullAt(tags.value, idx);
+    submitTags()
   };
   // 添加标签
   const handleInputConfirm = () => {
@@ -33,6 +50,8 @@ export default function useDynamicTags(requestFn: any) {
       } else {
         tags.value = [val];
       }
+      // 提交
+      submitTags()
     }
     inputTagVisible.value = false;
   };
@@ -48,6 +67,10 @@ export default function useDynamicTags(requestFn: any) {
 
   // 查询数据
   const querySearchAsync = async (queryString: string, cb: any) => {
+    if(typeof requestFn !== 'function') {
+      cb([]);
+      return;
+    }
     try {
       const { data } = await requestFn(queryString);
       cb(data);
