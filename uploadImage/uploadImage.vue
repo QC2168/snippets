@@ -1,8 +1,12 @@
 <template>
-  <div>
+  <div :style="{ height: `${loading ? (props.height += 25) : props.height}px` }">
     <el-upload
       v-loading="loading"
-      class="w-[100px] h-[100px] flex justify-center items-center"
+      :style="{
+        width: props.width + 'px',
+        height: props.height + 'px'
+      }"
+      :class="`flex justify-center items-center`"
       drag
       :show-file-list="false"
       :on-error="uploadErrorFn"
@@ -10,36 +14,52 @@
       :before-upload="beforeUpload"
       :http-request="uploadImgFn.req"
     >
-      <div class="w-[100px] h-[100px] flex justify-center items-center">
+      <div
+        :class="`flex justify-center items-center`"
+        :style="{ width: props.width + 'px', height: props.height + 'px' }"
+      >
         <img
           v-if="props.modelValue"
           :src="props.modelValue"
-          class="w-[100px] h-[100px] object-contain"
+          :class="`object-contain`"
+          :style="{ width: props.width + 'px', height: props.height + 'px' }"
         />
         <div v-else>
           <el-icon>
             <Plus />
           </el-icon>
           <p class="text-sm text-gray-400">点击添加图片</p>
+          <p v-show="props.desc" class="text-sm text-red-600">{{ props.desc }}</p>
         </div>
       </div>
     </el-upload>
-    <div v-if="loading" class="h-20 my-1 w-[100px]">
+    <div v-if="loading" class="h-8 my-1" :style="{ width: props.width + 'px' }">
       <el-progress :text-inside="true" :stroke-width="15" :percentage="uploadImgPercent" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { Plus } from '@element-plus/icons-vue';
 import { watch } from 'vue';
+import { Plus } from '@element-plus/icons-vue';
 import useUploadImage from './useUploadImage';
 import uploadFn from './uploadFn';
-const props = defineProps<{
+
+interface Props {
   modelValue: string | undefined;
-}>();
+  width?: number;
+  height?: number;
+  desc?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  width: 150,
+  height: 150
+});
+
 const emits = defineEmits<{
   (e: 'update:modelValue', url: string): void;
 }>();
+
 const {
   uploadImgFn,
   percent: uploadImgPercent,
@@ -63,12 +83,12 @@ defineExpose({
 <style lang="scss" scoped>
 :deep(.el-upload-dragger) {
   @apply p-0 flex justify-center items-center;
-  width: 100px !important;
-  height: 100px !important;
+  width: v-bind('props.width') + px !important;
+  height: v-bind('props.height') + px !important;
 }
 :deep(.el-upload) {
   @apply p-0 flex justify-center items-center;
-  width: 100px !important;
-  height: 100px !important;
+  width: v-bind('props.width') + px !important;
+  height: v-bind('props.height') + px !important;
 }
 </style>
