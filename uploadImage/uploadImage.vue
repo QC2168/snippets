@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ height: `${loading ? (props.height += 25) : props.height}px` }">
+  <div :style="{ height: `${loading ? (props.height + 25) : props.height}px` }">
     <el-upload
       v-loading="loading"
       :style="{
