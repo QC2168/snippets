@@ -1,7 +1,10 @@
 <template>
   <div class="editor-container">
     <div ref="editorToolbar" />
-    <div ref="editorContent" :style="{ height }" />
+    <div
+      ref="editorContent"
+      :style="{ height }"
+    />
   </div>
 </template>
 
@@ -11,11 +14,11 @@ import {
   createToolbar,
   IEditorConfig,
   IToolbarConfig,
-  IDomEditor
+  IDomEditor,
 } from '@wangeditor/editor';
 import '@wangeditor/editor/dist/css/style.css';
-import { toolbarKeys } from './toolbar';
 import { onMounted, ref, watch } from 'vue';
+import toolbarKeys from './toolbar';
 
 const editorToolbar = ref<string | Element>('');
 const editor = ref<IDomEditor>();
@@ -32,7 +35,7 @@ interface PropsType {
 const props = withDefaults(defineProps<PropsType>(), {
   // 节点id
   id: 'editor',
-  //是否禁用
+  // 是否禁用
   isDisable: false,
   placeholder: '请输入内容',
   // https://www.wangeditor.com/v5/getting-started.html#mode-%E6%A8%A1%E5%BC%8F
@@ -40,24 +43,25 @@ const props = withDefaults(defineProps<PropsType>(), {
   mode: 'default',
   // 双向绑定：双向绑定值，字段名为固定，改了之后将不生效
   modelValue: '',
-  height: '310px'
+  height: '310px',
 });
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void;
+const emit = defineEmits<{(e: 'update:modelValue', value: string): void;
 }>();
 
 // 富文本配置
 const wangeditorConfig = () => {
   const editorConfig: Partial<IEditorConfig> = { MENU_CONF: {} };
-  props.isDisable ? (editorConfig.readOnly = true) : (editorConfig.readOnly = false);
+  if (props.isDisable) {
+    editorConfig.readOnly = true;
+  } else {
+    editorConfig.readOnly = false;
+  }
   editorConfig.placeholder = props.placeholder;
   editorConfig.onChange = (editor: IDomEditor) => {
-    // console.log('content', editor.children);
-    // console.log('html', editor.getHtml());
     emit('update:modelValue', editor.getHtml());
   };
-  (editorConfig as any).MENU_CONF['uploadImage'] = {
-    base64LimitSize: 10 * 1024 * 1024
+  (editorConfig as any).MENU_CONF.uploadImage = {
+    base64LimitSize: 10 * 1024 * 1024,
   };
   return editorConfig;
 };
@@ -74,13 +78,13 @@ const init = () => {
     html: props.modelValue,
     selector: editorContent.value,
     config: wangeditorConfig(),
-    mode: props.mode
+    mode: props.mode,
   });
   createToolbar({
     editor: editor.value,
     selector: editorToolbar.value,
     mode: props.mode,
-    config: toolbarConfig()
+    config: toolbarConfig(),
   });
 };
 
@@ -88,9 +92,9 @@ watch(
   () => props.modelValue,
   (value) => {
     if (value === '' || (value === undefined && editor.value)) {
-      editor.value!.clear();
+      editor.value?.clear();
     }
-  }
+  },
 );
 
 // 页面加载时

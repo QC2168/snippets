@@ -1,20 +1,19 @@
 <template>
   <div ref="wrapper">
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
 <script setup lang="ts">
-import BScroll from "@better-scroll/core";
-import { nextTick, onMounted, ref } from "vue";
+import BScroll from '@better-scroll/core';
+import { nextTick, onMounted, ref } from 'vue';
 
 let scroll: InstanceType<typeof BScroll>;
-let wrapper = ref<HTMLElement>();
-const emit = defineEmits<{
-  (e: "scroll", pos: string): void;
-  (e: "scrollToEnd"): void;
-  (e: "beforeScroll"): void;
-  (e: "pulldown"): void;
+const wrapper = ref<HTMLElement>();
+const emit = defineEmits<{(e: 'scroll', pos: string): void;
+  (e: 'scrollToEnd'): void;
+  (e: 'beforeScroll'): void;
+  (e: 'pulldown'): void;
 }>();
 // 禁止滚动
 const disable = () => {
@@ -83,45 +82,45 @@ const props = withDefaults(defineProps<PropsType>(), {
 onMounted(() => {
   nextTick(() => {
     // 保证在DOM渲染完毕后初始化better-scroll
-    scroll = new BScroll(wrapper.value!, {
+    scroll = new BScroll(wrapper.value as HTMLDivElement, {
       probeType: props.probeType,
       click: props.click,
       scrollX: props.scrollX,
       mouseWheel: true,
       nestedScroll: {
-        groupId: "vertical-nested-scroll",
+        groupId: 'vertical-nested-scroll',
       },
     });
     // 是否派发滚动事件
     if (props.listenScroll) {
-      scroll.on("scroll", (pos: string) => {
-        emit("scroll", pos);
+      scroll.on('scroll', (pos: string) => {
+        emit('scroll', pos);
       });
     }
     // 是否派发滚动到底部事件，用于上拉加载
     if (props.pullup) {
-      scroll.on("scrollEnd", () => {
+      scroll.on('scrollEnd', () => {
         // 滚动到底部
         if (scroll.y <= scroll.value.maxScrollY + 50) {
-          emit("scrollToEnd");
+          emit('scrollToEnd');
         }
       });
     }
 
     // 是否派发顶部下拉事件，用于下拉刷新
     if (props.pulldown) {
-      scroll.on("touchend", (pos: { y: number }) => {
+      scroll.on('touchend', (pos: { y: number }) => {
         // 下拉动作
         if (pos.y > 50) {
-          emit("pulldown");
+          emit('pulldown');
         }
       });
     }
 
     // 是否派发列表滚动开始的事件
     if (props.beforeScroll) {
-      scroll.on("beforeScrollStart", () => {
-        emit("beforeScroll");
+      scroll.on('beforeScrollStart', () => {
+        emit('beforeScroll');
       });
     }
   });

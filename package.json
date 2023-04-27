@@ -8,22 +8,32 @@
   "license": "MIT",
   "scripts": {
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "lint": "eslint --fix --ext .js,.vue,.ts ./"
   },
   "dependencies": {
     "@better-scroll/core": "^2.5.0",
     "@element-plus/icons-vue": "^2.0.10",
+    "@types/lodash-es": "^4.17.7",
     "@types/node": "^18.11.9",
+    "@types/sortablejs": "^1.15.1",
     "@wangeditor/editor": "^5.1.23",
     "async-validator": "^4.2.5",
     "axios": "^1.2.6",
     "element-plus": "^2.2.23",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.27.5",
     "lodash-es": "^4.17.21",
     "sortablejs": "^1.15.0",
+    "typescript": "^5.0.3",
     "vitest": "^0.28.4",
     "vue": "^3.2.45"
   },
   "devDependencies": {
-    "@types/better-scroll": "^1.12.4"
+    "@types/better-scroll": "^1.12.4",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "eslint": "^8.37.0",
+    "eslint-plugin-vue": "^9.11.0"
   }
 }

@@ -23,18 +23,33 @@
           :src="props.modelValue"
           :class="`object-contain`"
           :style="{ width: props.width + 'px', height: props.height + 'px' }"
-        />
+        >
         <div v-else>
           <el-icon>
             <Plus />
           </el-icon>
-          <p class="text-sm text-gray-400">点击添加图片</p>
-          <p v-show="props.desc" class="text-sm text-red-600">{{ props.desc }}</p>
+          <p class="text-sm text-gray-400">
+            点击添加图片
+          </p>
+          <p
+            v-show="props.desc"
+            class="text-sm text-red-600"
+          >
+            {{ props.desc }}
+          </p>
         </div>
       </div>
     </el-upload>
-    <div v-if="loading" class="h-8 my-1" :style="{ width: props.width + 'px' }">
-      <el-progress :text-inside="true" :stroke-width="15" :percentage="uploadImgPercent" />
+    <div
+      v-if="loading"
+      class="h-8 my-1"
+      :style="{ width: props.width + 'px' }"
+    >
+      <el-progress
+        :text-inside="true"
+        :stroke-width="15"
+        :percentage="uploadImgPercent"
+      />
     </div>
   </div>
 </template>
@@ -48,16 +63,16 @@ interface Props {
   modelValue: string | undefined;
   width?: number;
   height?: number;
-  desc?: string;
+  desc?: string|null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   width: 150,
-  height: 150
+  height: 150,
+  desc: null,
 });
 
-const emits = defineEmits<{
-  (e: 'update:modelValue', url: string): void;
+const emits = defineEmits<{(e: 'update:modelValue', url: string): void;
 }>();
 
 const {
@@ -68,7 +83,7 @@ const {
   image,
   abort,
   beforeUpload,
-  handleSuccess
+  handleSuccess,
 } = useUploadImage(uploadFn);
 
 watch(image, (newVal) => {
@@ -77,7 +92,7 @@ watch(image, (newVal) => {
 
 defineExpose({
   abort,
-  image
+  image,
 });
 </script>
 <style lang="scss" scoped>

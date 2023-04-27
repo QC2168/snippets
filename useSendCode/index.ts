@@ -1,9 +1,10 @@
-import { ref, computed } from "vue";
+import { ref, computed } from 'vue';
+
 export default function useSendCode(cb: (mobile: string) => any, time = 60) {
   // 是否发送验证码
   const isSendCode = ref<boolean>(false);
   // 按钮文本
-  const btnText = ref<string>("发送验证码");
+  const btnText = ref<string>('发送验证码');
   // 倒计时
   const remainSecond = ref<number>(time);
   // 按钮可视
@@ -22,7 +23,7 @@ export default function useSendCode(cb: (mobile: string) => any, time = 60) {
         clearInterval(timer.value);
         remainSecond.value = 0;
         isSendCode.value = false;
-        btnText.value = `重新发送`;
+        btnText.value = '重新发送';
       }
     }, 1000);
   };

@@ -1,7 +1,7 @@
-export default (obj: any,value=undefined): any => {
-  if (!obj) return;
+export default (obj: any, value = undefined) :any => {
+  if (!obj) return {};
   const keys = Reflect.ownKeys(obj);
-  let tmp = {};
+  const tmp = {};
   keys.forEach((key) => {
     Reflect.set(tmp, key, value);
   });

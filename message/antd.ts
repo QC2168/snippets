@@ -1,17 +1,17 @@
 import { message } from 'antd';
 
 export function createSuccessMessage(msg: string) {
-    message.success(msg);
+  message.success(msg);
 }
 
 export function createWarningMessage(msg: string) {
-    message.warning(msg);
+  message.warning(msg);
 }
 
 export function createErrorMessage(msg: string) {
-    message.error(msg);
+  message.error(msg);
 }
 
 export function createInfoMessage(msg: string) {
-    message.info(msg);
+  message.info(msg);
 }

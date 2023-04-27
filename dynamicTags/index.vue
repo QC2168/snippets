@@ -32,17 +32,16 @@
 </template>
 <script setup lang="ts">
 
-import useDynamicTags from "./useDynamicTags";
-import { watch } from "vue";
+import { watch } from 'vue';
+import useDynamicTags from './useDynamicTags';
 
-const props=defineProps<{
+const props = defineProps<{
   submitFn?:any,
   requestTag?:any,
   modelValue: string[];
-}>()
+}>();
 
-const emit = defineEmits<{
-		(e: 'update:modelValue', tags: string[]): void;
+const emit = defineEmits<{(e: 'update:modelValue', tags: string[]): void;
 }>();
 
 const {
@@ -55,17 +54,17 @@ const {
   handleInputConfirm,
   handleAddTags,
 } = useDynamicTags({
-  submitFn:props.submitFn,
-  requestFn:props.requestTag
+  submitFn: props.submitFn,
+  requestFn: props.requestTag,
 });
 
 watch(tags, (val: string[]) => {
-	emit('update:modelValue', val);
+  emit('update:modelValue', val);
 });
 
-watch(()=>props.modelValue, (val: string[]) => {
-  if(!val)return
-	tags.value = val;
+watch(() => props.modelValue, (val: string[]) => {
+  if (!val) return;
+  tags.value = val;
 });
 
 </script>

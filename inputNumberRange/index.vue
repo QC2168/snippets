@@ -1,171 +1,197 @@
 <template>
-    <div>
-        <div class="input-number-range" :class="{ 'is-disabled': disabled }">
-            <div class="flex">
-                <div class="from">
-                    <el-input ref="input_from" v-model="userInputForm" :disabled="disabled"
-                        :placeholder="minPlaceholder" @blur="handleBlurFrom" @focus="handleFocusFrom"
-                        @input="handleInputFrom" @change="handleInputChangeFrom"></el-input>
-                </div>
-                <div class="center">
-                    <span>至</span>
-                </div>
-                <div class="to">
-                    <el-input ref="input_to" v-model="userInputTo" :disabled="disabled" :placeholder="maxPlaceholder"
-                        @blur="handleBlurTo" @focus="handleFocusTo" @input="handleInputTo"
-                        @change="handleInputChangeTo"></el-input>
-                </div>
-            </div>
+  <div>
+    <div
+      class="input-number-range"
+      :class="{ 'is-disabled': disabled }"
+    >
+      <div class="flex">
+        <div class="from">
+          <el-input
+            ref="input_from"
+            v-model="userInputForm"
+            :disabled="disabled"
+            :placeholder="minPlaceholder"
+            @blur="handleBlurFrom"
+            @focus="handleFocusFrom"
+            @input="handleInputFrom"
+            @change="handleInputChangeFrom"
+          />
         </div>
+        <div class="center">
+          <span>至</span>
+        </div>
+        <div class="to">
+          <el-input
+            ref="input_to"
+            v-model="userInputTo"
+            :disabled="disabled"
+            :placeholder="maxPlaceholder"
+            @blur="handleBlurTo"
+            @focus="handleFocusTo"
+            @input="handleInputTo"
+            @change="handleInputChangeTo"
+          />
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'InputNumberRange',
+  name: 'InputNumberRange',
+  props: {
+    modelValue: { required: true, type: String },
 
-    props: {
-        modelValue: { required: true },
-
-        // 是否禁用
-        disabled: {
-            type: Boolean,
-            default: false
-        },
-
-
-        minPlaceholder: {
-            type: String,
-            default: '最小值'
-        },
-
-        maxPlaceholder: {
-            type: String,
-            default: '最大值'
-        },
-
-        // 精度参数
-        precision: {
-            type: Number,
-            default: 0,
-            validator(val) {
-                return val >= 0 && val === parseInt(val, 10);
-            }
-        }
+    // 是否禁用
+    disabled: {
+      type: Boolean,
+      default: false,
     },
 
-    data() {
-        return {
-            userInputForm: null,
-            userInputTo: null
-        };
+    minPlaceholder: {
+      type: String,
+      default: '最小值',
     },
 
-    watch: {
-        modelValue: {
-            immediate: true,
-            handler(value) {
-                if (value === undefined) {
-                    this.userInputForm = undefined;
-                    this.userInputTo = undefined;
-                }
-                if (value instanceof Array && this.precision !== undefined) {
-                    this.userInputForm = typeof value[0] === 'number' ? value[0] : '';
-                    this.userInputTo = typeof value[1] === 'number' ? value[1] : '';
-                }
-            }
-        }
+    maxPlaceholder: {
+      type: String,
+      default: '最大值',
     },
 
-    methods: {
-        // 根据精度保留数字
-        toPrecision(num, precision) {
-            if (precision === undefined) precision = 0;
-            return parseFloat(Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision));
-        },
+    // 精度参数
+    precision: {
+      type: Number,
+      default: 0,
+      validator(val) {
+        return val >= 0 && val === parseInt(val, 10);
+      },
+    },
+  },
+  emits: ['blurfrom',
+    'focusfrom',
+    'blurto',
+    'focusto',
+    'inputfrom',
+    'inputto',
+    'update:modelValue',
+    'changefrom',
+    'update:modelValue',
+    'changefrom',
+    'update:modelValue',
+    'changefrom',
+    'update:modelValue',
+    'changeto'],
 
-        handleBlurFrom(event) {
-            this.$emit('blurfrom', event);
-        },
+  data() {
+    return {
+      userInputForm: null,
+      userInputTo: null,
+    };
+  },
 
-        handleFocusFrom(event) {
-            this.$emit('focusfrom', event);
-        },
-
-        handleBlurTo(event) {
-            this.$emit('blurto', event);
-        },
-
-        handleFocusTo(event) {
-            this.$emit('focusto', event);
-        },
-
-        handleInputFrom(value) {
-            this.$emit('inputfrom', value);
-            // this.userInputFrom = value
-        },
-
-        handleInputTo(value) {
-            this.$emit('inputto', value);
-            // this.userInputTo = value
-        },
-
-        // from输入框change事件
-        handleInputChangeFrom(value) {
-            // 如果是非数字空返回null
-            if (isNaN(value) || value === '') {
-                this.userInputForm = '';
-                this.$emit('update:modelValue', ['', this.userInputTo].join(','));
-                this.$emit('changefrom', this.userInputForm);
-                return;
-            }
-
-            // 初始化数字精度
-            this.userInputForm = this.setPrecisionValue(value);
-
-            // 如果from > to 将from值替换成to
-            if (typeof this.userInputTo === 'number') {
-                this.userInputForm =
-                    parseFloat(this.userInputForm) <= parseFloat(this.userInputTo)
-                        ? this.userInputForm
-                        : this.userInputTo;
-            }
-            this.$emit('update:modelValue', [this.userInputForm, this.userInputTo].join(','));
-            this.$emit('changefrom', this.userInputForm);
-        },
-
-        // to输入框change事件
-        handleInputChangeTo(value) {
-            // 如果是非数字空返回null
-            if (isNaN(value) || value === '') {
-                this.userInputTo = '';
-                this.$emit('update:modelValue', [this.userInputForm, ''].join(','));
-                this.$emit('changefrom', this.userInputTo);
-                return;
-            }
-
-            // 初始化数字精度
-            this.userInputTo = this.setPrecisionValue(value);
-
-            if (typeof this.userInputForm === 'number') {
-                this.userInputTo =
-                    parseFloat(this.userInputTo) >= parseFloat(this.userInputForm)
-                        ? this.userInputTo
-                        : this.userInputForm;
-            }
-            this.$emit('update:modelValue', [this.userInputForm, this.userInputTo].join(','));
-            this.$emit('changeto', this.userInputTo);
-        },
-
-        // 设置成精度数字
-        setPrecisionValue(value) {
-            if (this.precision !== undefined) {
-                const val = this.toPrecision(value, this.precision);
-                return val;
-            }
-            return null;
+  watch: {
+    modelValue: {
+      immediate: true,
+      handler(value) {
+        if (value === undefined) {
+          this.userInputForm = undefined;
+          this.userInputTo = undefined;
         }
-    }
+        if (value instanceof Array && this.precision !== undefined) {
+          this.userInputForm = typeof value[0] === 'number' ? value[0] : '';
+          this.userInputTo = typeof value[1] === 'number' ? value[1] : '';
+        }
+      },
+    },
+  },
+
+  methods: {
+    // 根据精度保留数字
+    toPrecision(num, precision = 0) {
+      return parseFloat(Math.round(num * 10 ** precision) / 10 ** precision);
+    },
+
+    handleBlurFrom(event) {
+      this.$emit('blurfrom', event);
+    },
+
+    handleFocusFrom(event) {
+      this.$emit('focusfrom', event);
+    },
+
+    handleBlurTo(event) {
+      this.$emit('blurto', event);
+    },
+
+    handleFocusTo(event) {
+      this.$emit('focusto', event);
+    },
+
+    handleInputFrom(value) {
+      this.$emit('inputfrom', value);
+      // this.userInputFrom = value
+    },
+
+    handleInputTo(value) {
+      this.$emit('inputto', value);
+      // this.userInputTo = value
+    },
+
+    // from输入框change事件
+    handleInputChangeFrom(value) {
+      // 如果是非数字空返回null
+      if (Number.isNaN(value) || value === '') {
+        this.userInputForm = '';
+        this.$emit('update:modelValue', ['', this.userInputTo].join(','));
+        this.$emit('changefrom', this.userInputForm);
+        return;
+      }
+
+      // 初始化数字精度
+      this.userInputForm = this.setPrecisionValue(value);
+
+      // 如果from > to 将from值替换成to
+      if (typeof this.userInputTo === 'number') {
+        this.userInputForm = parseFloat(this.userInputForm) <= parseFloat(this.userInputTo)
+          ? this.userInputForm
+          : this.userInputTo;
+      }
+      this.$emit('update:modelValue', [this.userInputForm, this.userInputTo].join(','));
+      this.$emit('changefrom', this.userInputForm);
+    },
+
+    // to输入框change事件
+    handleInputChangeTo(value) {
+      // 如果是非数字空返回null
+      if (Number.isNaN(value) || value === '') {
+        this.userInputTo = '';
+        this.$emit('update:modelValue', [this.userInputForm, ''].join(','));
+        this.$emit('changefrom', this.userInputTo);
+        return;
+      }
+
+      // 初始化数字精度
+      this.userInputTo = this.setPrecisionValue(value);
+
+      if (typeof this.userInputForm === 'number') {
+        this.userInputTo = parseFloat(this.userInputTo) >= parseFloat(this.userInputForm)
+          ? this.userInputTo
+          : this.userInputForm;
+      }
+      this.$emit('update:modelValue', [this.userInputForm, this.userInputTo].join(','));
+      this.$emit('changeto', this.userInputTo);
+    },
+
+    // 设置成精度数字
+    setPrecisionValue(value) {
+      if (this.precision !== undefined) {
+        const val = this.toPrecision(value, this.precision);
+        return val;
+      }
+      return null;
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

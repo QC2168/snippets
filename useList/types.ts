@@ -1,4 +1,4 @@
-import { Ref } from "vue";
+import { Ref } from 'vue';
 // Api接口类型
 export interface ResponseDataType<T = any> {
   data: T;
@@ -26,9 +26,9 @@ export interface OptionsType<T = any> {
   exportError?: () => void;
   exportSuccess?: () => void;
   filterOption?: Ref<T>;
-  transformFn?: (...args) => ListReturn;
+  transformFn?: (...args:any[]) => ListReturn;
   exportRequestFn?: (...args: any) => Promise<ResponseDataType<ExportLinkType>>;
   message?: MessageType;
-  preRequest?: Function;
+  preRequest?: (...args:any[]) => void;
   immediate?: boolean;
 }

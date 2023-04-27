@@ -1,9 +1,9 @@
-import response from './data.json'
+import response from './data.json';
 
 /**
  * ProfileBody
  */
- export interface ProfileBody {
+export interface ProfileBody {
     /**
      * Avatar，用户头像地址
      */
@@ -66,14 +66,14 @@ import response from './data.json'
     user?: string;
   }
 
-  export interface ResponseType<T = any> {
+export interface ResponseType<T = any> {
     data: T;
     meta: {
       total: number;
     };
   }
- export function requestFn(): Promise<ResponseType<ProfileBody[]>> {
-    return new Promise((resolve, reject) => {
-      resolve(response);
-    });
-  }
+export function requestFn(): Promise<ResponseType<ProfileBody[]>> {
+  return new Promise((resolve) => {
+    resolve(response);
+  });
+}
