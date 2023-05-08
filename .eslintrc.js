@@ -27,5 +27,6 @@ module.exports = {
     'import/no-unresolved': 'off',
     'vue/multi-word-component-names': 'off',
     'no-underscore-dangle': 'off',
+    'max-len': 'off',
   },
 };
