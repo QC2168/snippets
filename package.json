@@ -17,6 +17,7 @@
     "@types/lodash-es": "^4.17.7",
     "@types/node": "^18.11.9",
     "@types/sortablejs": "^1.15.1",
+    "@types/uni-app": "^1.4.4",
     "@wangeditor/editor": "^5.1.23",
     "async-validator": "^4.2.5",
     "axios": "^1.2.6",
@@ -30,6 +31,7 @@
     "vue": "^3.2.45"
   },
   "devDependencies": {
+    "@dcloudio/types": "^3.3.3",
     "@types/better-scroll": "^1.12.4",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
