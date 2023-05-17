@@ -3,30 +3,30 @@ import * as qs from 'qs';
 
 const isHttpURL = /^https?:\/\//i;
 interface HttpConfig {
-    // 请求URL的前缀，如果传入的url不为完整路径时会自动拼接此参数
-    baseURL?: string;
-    // 请求参数，最终会拼接在URL上
-    params?: URLSearchParams | object;
-    // params不是URLSearchParams类型时，使用此方法序列化为字符串
-    paramsSerializer?: (params: any) => string
-    // 请求体，属性禁止传值
-    readonly body?: BodyInit | null;
-    // 提交的数据，最终会被处理为对应的格式，放在body中
-    data?: FormData | URLSearchParams | object | string,
-    // 序列化data的方法，只有当data的类型不为FormData和URLSearchParams时，并且请求方式指定为表单提交时执行
-    dataSerializer?: (params: any) => string
-    // 请求头
-    headers?: HeadersInit;
-    // 请求方式
-    method?: string;
-    // 返回值类型
-    responseType?: 'arrayBuffer' | 'blob' | 'formData' | 'json' | 'text';
+  // 请求URL的前缀，如果传入的url不为完整路径时会自动拼接此参数
+  baseURL?: string;
+  // 请求参数，最终会拼接在URL上
+  params?: URLSearchParams | object;
+  // params不是URLSearchParams类型时，使用此方法序列化为字符串
+  paramsSerializer?: (params: any) => string
+  // 请求体，属性禁止传值
+  readonly body?: BodyInit | null;
+  // 提交的数据，最终会被处理为对应的格式，放在body中
+  data?: FormData | URLSearchParams | object | string,
+  // 序列化data的方法，只有当data的类型不为FormData和URLSearchParams时，并且请求方式指定为表单提交时执行
+  dataSerializer?: (params: any) => string
+  // 请求头
+  headers?: HeadersInit;
+  // 请求方式
+  method?: string;
+  // 返回值类型
+  responseType?: 'arrayBuffer' | 'blob' | 'formData' | 'json' | 'text';
 }
 
 export interface ResponseResult<T = any> {
-    code: number;
-    message?: string;
-    data?: T
+  code: number;
+  message?: string;
+  data?: T
 }
 
 const fetchUtil = {
@@ -37,7 +37,7 @@ const fetchUtil = {
     const baseConfig = config;
 
     // 最终请求时使用的函数
-    const customFetch = <T = any>(input: RequestInfo | URL, init: RequestInit, responseType?: 'arrayBuffer' | 'blob' | 'formData' | 'json' | 'text'):Promise<ResponseResult<T>> => {
+    const customFetch = <T = any>(input: RequestInfo | URL, init: RequestInit, responseType?: 'arrayBuffer' | 'blob' | 'formData' | 'json' | 'text'): Promise<ResponseResult<T>> => {
       // 在这里可以对所有请求进行拦截处理
       const cfg = interceptorRequest(init);
       return new Promise(async (resolve, reject) => {
@@ -145,37 +145,21 @@ const fetchUtil = {
       return customFetch(replaceRequestURL ?? URLAddress, config, config.responseType);
     }
 
-    // request.get=<T=any>(url: string, params?: URLSearchParams | object, init?: HttpConfig) Promise<ResponseResult<T>>=> {
-    //   return request<T>(url, {
-    //     ...init,
-    //     params,
-    //     method: 'GET',
-    //     body: undefined,
-    //   });
-    // };
-    // request.post = <T>(url: string, data?: FormData | URLSearchParams | object | string, init?: HttpConfig) Promise<ResponseResult<T>> =>{
-    //   return request<T>(url, {
-    //     ...init,
-    //     data,
-    //     method: 'POST',
-    //   });
-    // };
+    ['delete', 'get', 'head', 'options'].forEach((method) => {
+      request.prototype[method] = (url: string, params: URLSearchParams | object, config: HttpConfig) => request(url, {
+        ...config,
+        method,
+        params,
+      });
+    });
 
-    // request.delete = function <T> (url: string, params?: URLSearchParams | object, init?: HttpConfig): Promise<ResponseResult<T>> {
-    //   return request<T>(url, {
-    //     ...init,
-    //     params,
-    //     method: 'DELETE',
-    //   });
-    // };
-    // request.put = function <T> (url: string, data?: FormData | URLSearchParams | object | string, init?: HttpConfig): Promise<ResponseResult<T>> {
-    //   return request<T>(url, {
-    //     ...init,
-    //     data,
-    //     method: 'PUT',
-    //   });
-    // };
-
+    ['post', 'put', 'patch'].forEach((method) => {
+      request.prototype[method] = (url: string, data: FormData | URLSearchParams | object | string, config: HttpConfig) => request(url, {
+        ...config,
+        method,
+        data,
+      });
+    });
     request.interceptors = {
       request: {
         use(callback: (init: RequestInit) => RequestInit) {
