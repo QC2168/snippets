@@ -9,7 +9,8 @@
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "lint": "eslint --fix --ext .js,.vue,.ts ./"
+    "lint": "eslint --fix --ext .js,.vue,.ts ./",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@better-scroll/core": "^2.5.0",
@@ -38,6 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "eslint": "^8.37.0",
-    "eslint-plugin-vue": "^9.11.0"
+    "eslint-plugin-vue": "^9.11.0",
+    "husky": "^8.0.3"
   }
 }
