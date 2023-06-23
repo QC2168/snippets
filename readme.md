@@ -26,6 +26,7 @@
 | utils/genRules    | 快速生成默认验证规则（async-validator & ElementUI）                   |
 | utils/clearObject    | 快速清空对象属性值（支持自定义属性值）                   |
 | fetchUtil    | 基于Typescript封装的fetchApi请求工具               |
+| wrapText    | Canvas换行工具函数               |
 
 ## 我也想提交代码片段
 
