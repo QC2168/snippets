@@ -1,7 +1,7 @@
 import { CascaderOption } from 'element-plus';
 import { ref, onMounted } from 'vue';
 
-export default function ueLabel(requestApi:()=>Promise<CascaderOption[]>) {
+export default function useLabel(requestApi:()=>Promise<CascaderOption[]>) {
   const list = ref<CascaderOption[]>([]);
   const load = async () => {
     const data = await requestApi();
