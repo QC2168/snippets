@@ -17,11 +17,11 @@ import {
   IDomEditor,
 } from '@wangeditor/editor';
 import '@wangeditor/editor/dist/css/style.css';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, shallowRef } from 'vue';
 import toolbarKeys from './toolbar';
 
 const editorToolbar = ref<string | Element>('');
-const editor = ref<IDomEditor>();
+const editor = shallowRef<IDomEditor>();
 const editorContent = ref<string | Element>('');
 
 interface PropsType {
