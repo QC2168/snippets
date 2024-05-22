@@ -1,3 +1,4 @@
+// copy from https://juejin.cn/post/7371716384847364147
 // 美化打印实现方法
 const prettyLog = () => {
   // in vite
@@ -85,7 +86,6 @@ const prettyLog = () => {
     img.src = url;
   };
 
-  // retu;
   return {
     info,
     error,
